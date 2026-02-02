@@ -1,0 +1,18 @@
+Program     → Statement*
+Statement   → VarDecl | Assign | IfStmt | WhileStmt | FuncDecl | ReturnStmt | ExprStmt
+VarDecl     → "var" ID "=" Expr ";"
+Assign      → ID "=" Expr ";"
+IfStmt      → "if" "(" Expr ")" Block ("else" Block)?
+WhileStmt   → "while" "(" Expr ")" Block
+FuncDecl    → "def" ID "(" ParamList? ")" Block
+ParamList   → ID ("," ID)*
+Block       → "{" Statement* "}"
+ReturnStmt  → "return" Expr ";"
+ExprStmt    → Expr ";"
+
+Expr        → Term (("+" | "-") Term)*
+Term        → Factor (("*" | "/") Factor)*
+Factor      → INT | FLOAT | STRING | ID | "(" Expr ")" | CallExpr
+CallExpr    → ID "(" ArgList? ")"
+ArgList     → Expr ("," Expr)*
+
