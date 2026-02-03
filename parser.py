@@ -1,9 +1,6 @@
-# parser.py
-
 from lexer import Lexer, Token, TokenType
 from ast import *
 
-# parser.py - Update the error method
 
 class Parser:
     def __init__(self, lexer: Lexer):
@@ -11,7 +8,7 @@ class Parser:
         self.tokens = lexer.tokenize()
         self.current_token_index = 0
         self.current_token = self.tokens[0] if self.tokens else None
-        self.had_error = False  # Add this
+        self.had_error = False 
     
     def error(self, message: str):
         """Report parsing error without crashing"""
@@ -23,18 +20,15 @@ class Parser:
         line = self.current_token.line if self.current_token else 1
         col = self.current_token.column if self.current_token else 1
         
-        # Show context
         print(f"\n❌ PARSER ERROR at line {line}, column {col}:")
         print(f"   {message}")
         
-        # Show the line with error
         if hasattr(self.lexer, 'text'):
             lines = self.lexer.text.split('\n')
             if line - 1 < len(lines):
                 print(f"   {lines[line-1]}")
                 print(f"   {' ' * (col-1)}^")
         
-        # Try to recover by skipping to next statement
         self.synchronize()
     
     def synchronize(self):
@@ -90,8 +84,6 @@ class Parser:
             return self.tokens[idx]
         return Token(TokenType.EOF, None, 0, 0)
     
-# parser.py (continued)
-
     # ============ EXPRESSION PARSING ============
     
     def parse_factor(self) -> Expression:
@@ -126,7 +118,6 @@ class Parser:
             return expr
         
         elif token.type in (TokenType.PLUS, TokenType.MINUS):
-            # Unary operator
             op = token.value
             self.eat(token.type)
             expr = self.parse_factor()
@@ -135,7 +126,7 @@ class Parser:
         else:
             self.error(f"Unexpected token in factor: {token.type}")
             self.eat(token.type)
-            return IntegerLiteral(0)  # dummy recovery node
+            return IntegerLiteral(0)  
 
     
     def parse_call_expression(self) -> CallExpression:
@@ -178,8 +169,6 @@ class Parser:
         
         return node
     
-    # parser.py - Add this method after parse_expression() but before parse_factor()
-
     def parse_comparison(self) -> Expression:
         """comparison → expr ((">" | "<" | "==" | "!=") expr)?"""
         node = self.parse_expression()
@@ -355,8 +344,6 @@ class Parser:
             return self.parse_return_statement()
         
         elif self.peek(TokenType.ID):
-            # Could be assignment or expression statement
-            # Look ahead to see if next token is "="
             if self.peek_ahead().type == TokenType.ASSIGN:
                 return self.parse_assignment()
             else:
@@ -368,7 +355,6 @@ class Parser:
             return ExpressionStatement(IntegerLiteral(0))
         
         else:
-            # Default to expression statement
             return self.parse_expression_statement()
     
     def parse_program(self) -> Program:

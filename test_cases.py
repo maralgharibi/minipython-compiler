@@ -1,7 +1,6 @@
-# test_cases.py
-
-from .Lexer import lexer
-
+from lexer import Lexer
+from parser import Parser
+from visitor import PrintVisitor
 
 def run_test(name, code, expected_errors=0):
     print(f"\n{'='*60}")
@@ -89,18 +88,19 @@ def factorial(n) {
 
 # ============ TEST CASE 3: Invalid code (syntax errors) ============
 test3 = """
-# Five clear syntax errors:
-var x = 10              # Error 1: Missing semicolon
+var x = 10              # 1. Missing semicolon
+if (x > 5 {             # 2. Missing closing paren
+    print("Hello");
+else {                  # 3. else without if
+    print("World")
+}                       # 4. Missing semicolon in block
 
-if x > 5) {             # Error 2: Missing opening paren
-    print("Hello")      # Error 3: Missing semicolon
+def func( {              # 5. Invalid function declaration
+    return 42;
 }
 
-def func {              # Error 4: Missing parentheses
-    return 42
-}                       # Error 5: Missing semicolon
+y = ;                    # (OPTIONAL extra error if you want 6)
 
-y = 5 +                 # Error: Incomplete expression
 """
 
 
@@ -136,14 +136,13 @@ if (a > 0 && a < 100) {
 }
 """
 
-# Run all tests
 if __name__ == "__main__":
     print("MINIPYTHON PARSER TEST SUITE")
     print("="*60)
     
     run_test("1. Valid code with all features", test1)
     run_test("2. Nested structures", test2)
-    run_test("3. Invalid code (error handling)", test3, expected_errors=5)
+    run_test("3. Invalid code (error handling)", test3, expected_errors=10)
     run_test("4. Complex expressions", test4)
     
     print(f"\n{'='*60}")

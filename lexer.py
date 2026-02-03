@@ -1,5 +1,3 @@
-# lexer.py
-
 class TokenType:
     # Keywords
     VAR = 'VAR'
@@ -41,7 +39,6 @@ class TokenType:
     # Special
     EOF = 'EOF'
 
-    # lexer.py (continued)
 
 class Token:
     def __init__(self, type, value, line, column):
@@ -53,7 +50,6 @@ class Token:
     def __repr__(self):
         return f"Token({self.type}, '{self.value}', line={self.line}, col={self.column})"
     
-# lexer.py (continued)
 
 class Lexer:
     def __init__(self, text):
@@ -95,7 +91,7 @@ class Lexer:
         """Skip single-line comments (# ...)"""
         while self.current_char and self.current_char != '\n':
             self.advance()
-        self.advance()  # Skip the newline
+        self.advance() 
     
     def number(self):
         """Read a number (int or float)"""
@@ -119,7 +115,7 @@ class Lexer:
     def string(self):
         """Read a string literal"""
         start_col = self.column
-        self.advance()  # Skip opening quote
+        self.advance() 
         result = ''
         
         while self.current_char and self.current_char != '"':
@@ -129,7 +125,7 @@ class Lexer:
         if not self.current_char:
             self.error("Unterminated string")
         
-        self.advance()  # Skip closing quote
+        self.advance() 
         return Token(TokenType.STRING, result, self.line, start_col)
     
     def identifier(self):
@@ -141,7 +137,6 @@ class Lexer:
             result += self.current_char
             self.advance()
         
-        # Check if it's a keyword
         keywords = {
             'var': TokenType.VAR,
             'def': TokenType.DEF,
@@ -157,33 +152,26 @@ class Lexer:
     def get_next_token(self):
         """Main method to get next token"""
         while self.current_char:
-            # Skip whitespace
             if self.current_char in ' \t\r\n':
                 self.skip_whitespace()
                 continue
             
-            # Skip comments
             if self.current_char == '#':
                 self.skip_comment()
                 continue
             
-            # Numbers
             if self.current_char.isdigit():
                 return self.number()
             
-            # Strings
             if self.current_char == '"':
                 return self.string()
             
-            # Identifiers and keywords
             if self.current_char.isalpha() or self.current_char == '_':
                 return self.identifier()
             
-            # Operators and delimiters
             start_col = self.column
             char = self.current_char
             
-            # Multi-character operators
             if char == '=':
                 self.advance()
                 if self.current_char == '=':
@@ -198,7 +186,6 @@ class Lexer:
                     return Token(TokenType.NEQ, '!=', self.line, start_col)
                 self.error(f"Unexpected character: {char}")
             
-# In get_next_token() method, find the '<' and '>' handling:
 
             if char == '<':
                 self.advance()
@@ -214,7 +201,6 @@ class Lexer:
                     return Token(TokenType.GTE, '>=', self.line, start_col)
                 return Token(TokenType.GT, '>', self.line, start_col)
             
-            # In get_next_token() method:
             if char == '&':
                 self.advance()
                 if self.current_char == '&':
@@ -243,7 +229,6 @@ class Lexer:
                     return Token(TokenType.GTE, '>=', self.line, start_col)
                 return Token(TokenType.GT, '>', self.line, start_col)
             
-            # Single character tokens
             single_tokens = {
                 '+': TokenType.PLUS,
                 '-': TokenType.MINUS,
@@ -261,7 +246,6 @@ class Lexer:
                 self.advance()
                 return Token(single_tokens[char], char, self.line, start_col)
             
-            # Unknown character
             self.error(f"Unexpected character: {char}")
         
         return Token(TokenType.EOF, None, self.line, self.column)

@@ -4,7 +4,6 @@ from lexer import Lexer
 from parser import Parser
 from visitor import PrintVisitor
 
-# Test code with multiple features
 test_code = """
 var x = 10;
 var y = x + 20;

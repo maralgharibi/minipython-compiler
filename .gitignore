@@ -1,8 +1,6 @@
-# پوشه محیط مجازی پایتون
 venv/
 __pycache__/
 *.pyc
 
-# فایل‌های سیستم
 .DS_Store
 Thumbs.db

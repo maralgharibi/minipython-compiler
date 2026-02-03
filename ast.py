@@ -1,5 +1,3 @@
-# ast.py
-
 from abc import ABC, abstractmethod
 
 class ASTNode(ABC):
@@ -13,7 +11,6 @@ class ASTNode(ABC):
     def __repr__(self):
         return f"{self.__class__.__name__}()"
     
-# ast.py (continued)
 
 # ============ EXPRESSIONS ============
 class Expression(ASTNode):
@@ -91,7 +88,7 @@ class CallExpression(Expression):
     """Function call"""
     def __init__(self, func_name, arguments):
         self.func_name = func_name
-        self.arguments = arguments  # List of expressions
+        self.arguments = arguments  
     
     def accept(self, visitor):
         return visitor.visit_call_expression(self)
@@ -100,8 +97,6 @@ class CallExpression(Expression):
         args = ', '.join(str(arg) for arg in self.arguments)
         return f"CallExpression({self.func_name}, [{args}])"
     
-# ast.py (continued)
-
 # ============ STATEMENTS ============
 
 class Statement(ASTNode):
@@ -113,7 +108,7 @@ class Statement(ASTNode):
 class Program(Statement):
     """Root node: contains list of statements"""
     def __init__(self, statements):
-        self.statements = statements  # List of statements
+        self.statements = statements
     
     def accept(self, visitor):
         return visitor.visit_program(self)
@@ -126,7 +121,7 @@ class VarDeclaration(Statement):
     """Variable declaration: var x = 10;"""
     def __init__(self, var_name, value):
         self.var_name = var_name
-        self.value = value  # Expression
+        self.value = value
     
     def accept(self, visitor):
         return visitor.visit_var_declaration(self)
@@ -138,7 +133,7 @@ class Assignment(Statement):
     """Assignment: x = 10;"""
     def __init__(self, var_name, value):
         self.var_name = var_name
-        self.value = value  # Expression
+        self.value = value 
     
     def accept(self, visitor):
         return visitor.visit_assignment(self)
@@ -149,7 +144,7 @@ class Assignment(Statement):
 class Block(Statement):
     """Block of statements: { stmt1; stmt2; }"""
     def __init__(self, statements):
-        self.statements = statements  # List of statements
+        self.statements = statements
     
     def accept(self, visitor):
         return visitor.visit_block(self)
@@ -161,9 +156,9 @@ class Block(Statement):
 class IfStatement(Statement):
     """If statement: if (condition) { ... } else { ... }"""
     def __init__(self, condition, then_block, else_block=None):
-        self.condition = condition  # Expression
-        self.then_block = then_block  # Block
-        self.else_block = else_block  # Block or None
+        self.condition = condition
+        self.then_block = then_block  
+        self.else_block = else_block 
     
     def accept(self, visitor):
         return visitor.visit_if_statement(self)
@@ -175,8 +170,8 @@ class IfStatement(Statement):
 class WhileStatement(Statement):
     """While loop: while (condition) { ... }"""
     def __init__(self, condition, body):
-        self.condition = condition  # Expression
-        self.body = body  # Block
+        self.condition = condition  
+        self.body = body 
     
     def accept(self, visitor):
         return visitor.visit_while_statement(self)
@@ -188,8 +183,8 @@ class FunctionDeclaration(Statement):
     """Function declaration: def func(x, y) { ... }"""
     def __init__(self, func_name, params, body):
         self.func_name = func_name
-        self.params = params  # List of parameter names
-        self.body = body  # Block
+        self.params = params
+        self.body = body 
     
     def accept(self, visitor):
         return visitor.visit_function_declaration(self)
@@ -201,7 +196,7 @@ class FunctionDeclaration(Statement):
 class ReturnStatement(Statement):
     """Return statement: return value;"""
     def __init__(self, value):
-        self.value = value  # Expression
+        self.value = value
     
     def accept(self, visitor):
         return visitor.visit_return_statement(self)

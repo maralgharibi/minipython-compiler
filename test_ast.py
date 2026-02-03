@@ -1,5 +1,3 @@
-# test_ast.py (create new file or add to main.py temporarily)
-
 from ast import *
 
 # Create some sample nodes
@@ -14,7 +12,6 @@ block = Block([var_decl, assign])
 
 if_stmt = IfStatement(id_node, block)
 
-# Print them
 print("AST Nodes created:")
 print(f"  IntegerLiteral: {int_lit}")
 print(f"  StringLiteral: {str_lit}")
